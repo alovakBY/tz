@@ -7,8 +7,13 @@ export const AppContainer = () => {
       cvv: 123,
       amount: 12345,
    };
+   // JSON.stringify(card)
    useEffect(() => {
       fetch("http://localhost:8000/cards", {
+         mode: "no-cors",
+         headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+         },
          method: "POST",
          body: JSON.stringify(card),
       });
