@@ -1,0 +1,27 @@
+.form {
+	max-width: 400px;
+	margin: 100px auto 0;
+}
+
+.label {
+	margin: 10px 0 5px;
+ }
+ 
+ .input {
+	margin-bottom: 20px !important;
+	width: 100%;
+ }
+ 
+ .error {
+	color: red;
+	padding: 4px 0;
+	margin-bottom: 15px;
+ }
+
+ .button {
+	width: 100%;
+ }
+ 
+ .buttonWrapper {
+	text-align:center;
+ }

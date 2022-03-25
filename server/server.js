@@ -1,28 +1,45 @@
-const feathers = require("@feathersjs/feathers");
 const express = require("@feathersjs/express");
-const bodyParser = require("body-parser");
+const feathers = require("@feathersjs/feathers");
 const MongoClient = require("mongodb").MongoClient;
 
 const app = express(feathers());
 const port = 8000;
-app.use(bodyParser.urlencoded({ extended: true }));
+
+// CORS
+app.use(function (req, res, next) {
+   res.header("Access-Control-Allow-Origin", "*");
+   res.header(
+      "Access-Control-Allow-Headers",
+      "Origin, X-Requested-With, Content-Type, Accept"
+   );
+   next();
+});
+
+// Bodyparser
+app.use(express.json());
 
 const mongoClient = new MongoClient("mongodb://localhost:27017");
+app.post("/cards", async (req, res) => {
+   await mongoClient.connect(async (err, db) => {
+      if (err) {
+         return res.sendStatus(503);
+      }
 
-mongoClient.connect((err, db) => {
-   if (err) return console.log(err);
-   const dbo = db.db("my_db");
-   app.listen(port, () => {
-      console.log(`Feathers server listening on port ${port}`);
-   });
-   dbo.createCollection("cards", function (err, res) {
-      if (err) throw err;
-      console.log("Collection created!");
+      const dataBase = await db.db("db_cards");
+
+      await dataBase.collection("cards");
+
+      await dataBase
+         .collection("cards")
+         .insertOne(req.body)
+         .then((result) => {
+            res.send({ amount: req.body.amount, id: result.insertedId });
+         })
+         .catch((err) => res.sendStatus(503));
       db.close();
    });
 });
 
-app.use("/cards", (req, res) => {
-   console.log(req.body);
-   res.send(req.body);
+app.listen(port, () => {
+   console.log(`Feathers server listening on port ${port}`);
 });
