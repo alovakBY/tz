@@ -11,7 +11,7 @@ export const VALIDATIONS_SCHEMA = {
    expirationDate: yup
       .string()
       .matches(
-         /(^(?:[0-1][0-2]) *\/ *[0-9][0-9][0-9][0-9]$)/,
+         /(^(?:[0][1-9]|[1][0-2]) *\/ *[0-9][0-9][0-9][0-9]$)/,
          VALIDATIONS_ERRORS_MESSAGES.EXPIRATION_DATE
       )
       .required(VALIDATIONS_ERRORS_MESSAGES.REQUIRED),

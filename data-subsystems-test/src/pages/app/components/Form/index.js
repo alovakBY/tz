@@ -1,12 +1,9 @@
 import { TextField, Button } from "@mui/material";
-import SendIcon from "@mui/icons-material/Send";
+import { Send as SendIcon } from "@mui/icons-material";
 
-// import { Button } from "../../../../commonComponents/Button";
+import classes from "./Form.module.css";
 
-import classes from "./App.module.css";
-import { useState } from "react";
-
-export const App = ({ formik }) => {
+export const Form = ({ formik }) => {
    const {
       values,
       errors,
@@ -20,11 +17,12 @@ export const App = ({ formik }) => {
 
    return (
       <form className={classes.form}>
-         <div>
+         <div className={classes.inputWrapper}>
+            <div className={classes.label}>Card number*</div>
             <TextField
                type="text"
                name="cardNumber"
-               label="Card number*"
+               label="XXXX XXXX XXXX XXXX"
                variant="outlined"
                onChange={handleChange}
                onBlur={handleBlur}
@@ -35,11 +33,12 @@ export const App = ({ formik }) => {
                <div className={classes.error}>{errors.cardNumber}</div>
             )}
          </div>
-         <div>
+         <div className={classes.inputWrapper}>
+            <div className={classes.label}>Expiration date*</div>
             <TextField
                type="text"
                name="expirationDate"
-               label="Expiration date*"
+               label="MM/YYYY"
                variant="outlined"
                onChange={handleChange}
                onBlur={handleBlur}
@@ -50,11 +49,12 @@ export const App = ({ formik }) => {
                <div className={classes.error}>{errors.expirationDate}</div>
             )}
          </div>
-         <div>
+         <div className={classes.inputWrapper}>
+            <div className={classes.label}>CVV*</div>
             <TextField
                type="text"
                name="cvv"
-               label="cvv*"
+               label="YYY"
                variant="outlined"
                onChange={handleChange}
                onBlur={handleBlur}
@@ -65,11 +65,12 @@ export const App = ({ formik }) => {
                <div className={classes.error}>{errors.cvv}</div>
             )}
          </div>
-         <div>
+         <div className={classes.inputWrapper}>
+            <div className={classes.label}>Amount*</div>
             <TextField
                type="text"
                name="amount"
-               label="amount*"
+               label="Amount*"
                variant="outlined"
                onChange={handleChange}
                onBlur={handleBlur}

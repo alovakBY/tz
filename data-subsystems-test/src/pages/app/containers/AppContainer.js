@@ -1,14 +1,21 @@
 import { useState } from "react";
 import * as yup from "yup";
 import { Formik } from "formik";
-import { Alert, Snackbar } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 
-import { App } from "../components/App";
+import { Form } from "../components/Form";
+import { ErrorComponent } from "../components/ErrorComponent";
+import { SuccessComponent } from "../components/SuccessComponent";
 
 import { VALIDATIONS_SCHEMA } from "../../../constants/validations";
 
+import classes from "./AppContainer.module.css";
+
 export const AppContainer = () => {
-   const [open, setOpen] = useState(true);
+   const [openSuccess, setOpenSuccess] = useState(false);
+   const [openError, setOpenError] = useState(false);
+   const [loading, setLoading] = useState(false);
+
    const validationsSchema = yup.object().shape({
       cardNumber: VALIDATIONS_SCHEMA.cardNumber,
       expirationDate: VALIDATIONS_SCHEMA.expirationDate,
@@ -17,43 +24,48 @@ export const AppContainer = () => {
    });
 
    const onSubmitForm = async (cardData, { resetForm }) => {
+      setLoading(true);
       await fetch("http://localhost:8000/cards", {
          headers: {
             "Content-Type": "application/json",
          },
          method: "post",
          body: JSON.stringify(cardData),
-      });
-      setOpen(true);
-      resetForm();
+      })
+         .then((data) => {
+            setOpenSuccess(true);
+            resetForm();
+         })
+         .catch((err) => {
+            console.log(err);
+            setOpenError(true);
+         })
+         .finally(() => setLoading(false));
    };
 
-   const handleClose = (event, reason) => {
-      setOpen(false);
+   const handleCloseSuccess = (event, reason) => {
+      setOpenSuccess(false);
+   };
+
+   const handleCloseError = (event, reason) => {
+      setOpenError(false);
    };
 
    return (
-      <div>
-         <Snackbar
-            open={open}
-            autoHideDuration={6000}
-            onClose={handleClose}
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-         >
-            <Alert onClose={handleClose} severity="success">
-               Card info successfuly registred!
-            </Alert>
-         </Snackbar>
-         <Snackbar
-            open={open}
-            autoHideDuration={6000}
-            onClose={handleClose}
-            anchorOrigin={{ vertical: "top", horizontal: "center" }}
-         >
-            <Alert onClose={handleClose} severity="error">
-               Error! Please try latter.
-            </Alert>
-         </Snackbar>
+      <div className={classes.container}>
+         {loading && (
+            <div className={classes.loading}>
+               <CircularProgress />
+            </div>
+         )}
+         <SuccessComponent
+            openSuccess={openSuccess}
+            handleCloseSuccess={handleCloseSuccess}
+         />
+         <ErrorComponent
+            openError={openError}
+            handleCloseError={handleCloseError}
+         />
          <Formik
             initialValues={{
                cardNumber: "",
@@ -65,7 +77,7 @@ export const AppContainer = () => {
             validationSchema={validationsSchema}
             onSubmit={onSubmitForm}
          >
-            {(formik) => <App formik={formik} />}
+            {(formik) => <Form formik={formik} />}
          </Formik>
       </div>
    );

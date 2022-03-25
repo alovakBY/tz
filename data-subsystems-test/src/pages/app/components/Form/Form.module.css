@@ -1,0 +1,30 @@
+.form {
+   max-width: 400px;
+   margin: 0 auto;
+}
+
+.label {
+   margin: 10px 0;
+}
+
+.inputWrapper {
+   margin-bottom: 15px !important;
+}
+
+.input {
+   width: 100%;
+}
+
+.error {
+   color: red;
+   padding: 0px 0 5px;
+   margin-bottom: 15px;
+}
+
+.button {
+   width: 100%;
+}
+
+.buttonWrapper {
+   text-align: center;
+}

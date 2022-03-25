@@ -1,8 +1,7 @@
 const express = require("@feathersjs/express");
-const feathers = require("@feathersjs/feathers");
 const MongoClient = require("mongodb").MongoClient;
 
-const app = express(feathers());
+const app = express();
 const port = 8000;
 
 // CORS
@@ -19,10 +18,11 @@ app.use(function (req, res, next) {
 app.use(express.json());
 
 const mongoClient = new MongoClient("mongodb://localhost:27017");
+
 app.post("/cards", async (req, res) => {
    await mongoClient.connect(async (err, db) => {
       if (err) {
-         return res.sendStatus(503);
+         throw new Error("Error");
       }
 
       const dataBase = await db.db("db_cards");
@@ -35,7 +35,9 @@ app.post("/cards", async (req, res) => {
          .then((result) => {
             res.send({ amount: req.body.amount, id: result.insertedId });
          })
-         .catch((err) => res.sendStatus(503));
+         .catch((err) => {
+            throw new Error(err);
+         });
       db.close();
    });
 });
